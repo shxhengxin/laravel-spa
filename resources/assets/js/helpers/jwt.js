@@ -1,4 +1,5 @@
-import Cookie from 'js-cookie'
+import Cookie from 'js-cookie';
+
 export default {
     //设置token
     setToken(token) {
@@ -11,6 +12,7 @@ export default {
     //移除token
     removeToken() {
         window.localStorage.removeItem('jwt_token');
+        Cookie.remove('auth_id');
     },
 
     setAuthId(authId) {

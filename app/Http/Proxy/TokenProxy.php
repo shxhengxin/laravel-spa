@@ -40,7 +40,7 @@ class TokenProxy
         return response()->json([
             'status' => false,
             'message' => 'Credentials not match'
-        ],421);
+        ], 421);
     }
 
 
@@ -52,20 +52,28 @@ class TokenProxy
     {
         $user = auth()->guard('api')->user();
 
+        if (is_null($user)) {
+            app('cookie')->queue(app('cookie')->forget('refreshToken'));
+            
+            return response()->json([
+                'message' => 'Logout!'
+            ], 204);
+        }
+
         $accessToken = $user->token();
 
         app('db')->table('oauth_refresh_tokens')
-            ->where('access_token_id',$accessToken->id)
+            ->where('access_token_id', $accessToken->id)
             ->update([
                 'revoked' => true,
             ]);
 
-        app('cookie')->forget('refreshToken');
+        app('cookie')->queue(app('cookie')->forget('refreshToken'));
 
         $accessToken->revoke();
         return response()->json([
             'message' => 'Logout!'
-        ],204);
+        ], 204);
     }
 
 
@@ -73,7 +81,7 @@ class TokenProxy
     {
         $refreshToken = response()->cookie('refreshToken');
 
-        return $this->proxy('refresh_token',[
+        return $this->proxy('refresh_token', [
             'refresh_token' => $refreshToken
         ]);
     }
