@@ -54,7 +54,7 @@ class TokenProxy
 
         if (is_null($user)) {
             app('cookie')->queue(app('cookie')->forget('refreshToken'));
-            
+
             return response()->json([
                 'message' => 'Logout!'
             ], 204);
@@ -79,7 +79,7 @@ class TokenProxy
 
     public function refresh()
     {
-        $refreshToken = response()->cookie('refreshToken');
+        $refreshToken = request()->cookie('refreshToken');
 
         return $this->proxy('refresh_token', [
             'refresh_token' => $refreshToken

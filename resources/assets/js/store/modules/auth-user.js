@@ -18,7 +18,14 @@ export default {
             state.name = null;
             state.email = null;
 
-        }
+        },
+        [types.UPDATE_PROFILE_NAME](state, payload){
+            state.name = payload.value;
+        },
+        [types.UPDATE_PROFILE_EMAIL](state, payload){
+            state.email = payload.value;
+        },
+
     },
     actions: {
         setAuthUser({commit, dispatch}){

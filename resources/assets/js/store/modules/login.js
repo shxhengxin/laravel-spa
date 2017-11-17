@@ -1,23 +1,24 @@
-import jwtToken from './../../helpers/jwt';
+
+import jwtToken from './../../helpers/jwt'
+
 export default {
     actions: {
         loginRequest({dispatch}, formData) {
             return axios.post('/api/login', formData).then(response => {
-                dispatch('loginSuccess', response.data);
-            });
+                dispatch('loginSuccess',response.data)
+            })
         },
         loginSuccess({dispatch}, tokenResponse) {
-            jwtToken.setToken(tokenResponse.token);
-            jwtToken.setAuthId(tokenResponse.auth_id);
-            dispatch('setAuthUser');
+            jwtToken.setToken(tokenResponse.token)
+            jwtToken.setAuthId(tokenResponse.auth_id)
+            dispatch('setAuthUser')
         },
-        logoutRequest({dispatch}){
-
-            return axios.get('/api/logout').then(response => {
-                jwtToken.removeToken();
-                dispatch('unsetAuthUser');
-            });
-
+        logoutRequest({dispatch}) {
+            return axios.post('/api/logout')
+                .then(response => {
+                    jwtToken.removeToken();
+                    dispatch('unsetAuthUser');
+                });
         }
     }
 }
